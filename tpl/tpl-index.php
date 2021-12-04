@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +11,7 @@
     <link rel="shortcut icon" href="assets/img/profile.png" type="image/x-icon">
     <title>SpeedTodo - Todo Manager</title>
 </head>
+
 <body>
     <div class="container">
         <div class="col-12 mt-5">
@@ -27,21 +29,19 @@
                         <div class="col-12 col-sm-3 side">
                             <div class="title">Folders</div>
                             <div class="add-folder mt-2">
-                                <input class="input px-2 pb-1" type="text" name="addFolderInput" placeholder="add new folder">
+                                <input class="input px-2 pb-1" type="text" id="addFolderInput" name="addFolderInput" placeholder="add new folder">
                                 <button id="addFolderBtn" class="custom-btn text-white"><i class="bi bi-plus"></i></button>
                             </div>
                             <ul class="folder-list p-0 list-unstyled">
                                 <li class="active">
-                                    <a href="#" class="link active"><i class="bi bi-folder-fill mx-2"></i>All</a>
+                                    <a href="<?= BASE_URL ?>" class="link <?= (isset($_GET['folder_id'])) ? '' : 'active' ?>"><i class="bi bi-folder-fill mx-2"></i>All</a>
                                 </li>
-                                <li>
-                                    <a href="#" class="link"><i class="bi bi-folder-fill mx-2"></i>Personal</a>
-                                    <a href="?delete_folder=1" class="float-end me-1 remove" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#" class="link"><i class="bi bi-folder-fill mx-2"></i>Work</a>
-                                    <a href="?delete_folder=1" class="float-end me-1 remove" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
-                                </li>
+                                <?php foreach ($folders as $folder) : ?>
+                                    <li>
+                                        <a href="?folder_id=<?= $folder->id ?>" class="link <?= (isset($_GET['folder_id']) && $_GET['folder_id'] == $folder->id) ? 'active' : '' ?>"><i class="bi bi-folder-fill mx-2"></i><?= $folder->name ?></a>
+                                        <a href="?delete_folder=<?= $folder->id ?>" class="float-end me-1 remove"><i class="bi bi-trash"></i></a>
+                                    </li>
+                                <?php endforeach ?>
                             </ul>
                         </div>
                         <div class="col-12 col-sm-9">
@@ -54,8 +54,8 @@
                                     <i data-taskid="1" class="is-done bi-hand-thumbs-up-fill"></i>
                                     <span class="task-title mx-2">complete the project</span>
                                     <div class="info float-end">
-                                      <span class="created_at">Created_at 2021-12-03 15:17:43</span>
-                                      <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
+                                        <span class="created_at">Created_at 2021-12-03 15:17:43</span>
+                                        <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </li>
@@ -64,8 +64,8 @@
                                     <i data-taskid="1" class="is-done bi-hand-thumbs-up"></i>
                                     <span class="task-title mx-2">complete the project</span>
                                     <div class="info float-end">
-                                      <span class="created_at">Created_at 2021-12-03 15:17:43</span>
-                                      <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
+                                        <span class="created_at">Created_at 2021-12-03 15:17:43</span>
+                                        <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </li>
@@ -74,8 +74,8 @@
                                     <i data-taskid="1" class="is-done bi-hand-thumbs-up"></i>
                                     <span class="task-title mx-2">complete the project</span>
                                     <div class="info float-end">
-                                      <span class="created_at">Created_at 2021-12-03 15:17:43</span>
-                                      <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
+                                        <span class="created_at">Created_at 2021-12-03 15:17:43</span>
+                                        <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </li>
@@ -88,5 +88,29 @@
     </div>
     <script src="assets/js/jquery-3.6.0.min.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#addFolderBtn').click(function() {
+                let input = $('#addFolderInput');
+                $.ajax({
+                    url: 'process/ajaxHandler.php',
+                    method: 'post',
+                    data: {
+                        action: 'addFolder',
+                        folderName: input.val()
+                    },
+                    success: function(responce) {
+                        if (responce == '1') {
+                            location.reload();
+                            input.val('');
+                        } else {
+                            alert(responce);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </body>
+
 </html>

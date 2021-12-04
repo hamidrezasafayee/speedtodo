@@ -67,7 +67,13 @@ body {
   background-color: #999;
 }
 
+ul .active {
+  color: #79bc46 !important;
+}
 li .active {
+  color: #79bc46 !important;
+}
+.active {
   color: #79bc46 !important;
 }
 
