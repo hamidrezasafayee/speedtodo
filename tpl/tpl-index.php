@@ -46,39 +46,21 @@
                         </div>
                         <div class="col-12 col-sm-9">
                             <div class="w-100 pb-4" style="border-bottom: 1px solid #E0E0E0;">
-                                <input type="text" class="" name="addTaskInput" id="addTaskInput" placeholder="add new task">
+                                <input type="text" name="addTaskInput" id="addTaskInput" placeholder="add new task">
                             </div>
                             <div class="tasks-title">My Tasks</div>
                             <ul class="list-unstyled">
-                                <li class="task checked border-bottom border-top my-1">
-                                    <i data-taskid="1" class="is-done bi-hand-thumbs-up-fill"></i>
-                                    <span class="task-title mx-2">complete the project</span>
-                                    <div class="info float-end">
-                                        <span class="created_at">Created_at 2021-12-03 15:17:43</span>
-                                        <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-
-                                <li class="task border-bottom border-top my-1">
-                                    <i data-taskid="1" class="is-done bi-hand-thumbs-up"></i>
-                                    <span class="task-title mx-2">complete the project</span>
-                                    <div class="info float-end">
-                                        <span class="created_at">Created_at 2021-12-03 15:17:43</span>
-                                        <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
-
-                                <li class="task border-bottom border-top my-1">
-                                    <i data-taskid="1" class="is-done bi-hand-thumbs-up"></i>
-                                    <span class="task-title mx-2">complete the project</span>
-                                    <div class="info float-end">
-                                        <span class="created_at">Created_at 2021-12-03 15:17:43</span>
-                                        <a href="?delete_task=1" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </li>
+                                <?php foreach ($tasks as $task) : ?>
+                                    <li class="task <?= $task->is_done == 1 ? 'checked' : '' ?> my-1">
+                                        <i data-taskId="<?= $task->id ?>" class="is_done <?= $task->is_done == 1 ? 'bi-hand-thumbs-up-fill' : 'bi-hand-thumbs-up' ?>"></i>
+                                        <span class="task-title mx-2"><?= $task->title ?></span>
+                                        <div class="info float-end">
+                                            <span class="created_at"><?= $task->created_at ?></span>
+                                            <a href="?delete_task=<?= $task->id ?>" class="pull-right remove text-danger" onclick="return confirm('Are you sure to delete this item?')"><i class="bi bi-trash"></i></a>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                <?php endforeach ?>
                             </ul>
                         </div>
                     </div>
@@ -90,6 +72,9 @@
     <script src="assets/js/custom.js"></script>
     <script>
         $(document).ready(function() {
+            $('#addTaskInput').focus();
+
+            // Add Folder
             $('#addFolderBtn').click(function() {
                 let input = $('#addFolderInput');
                 $.ajax({
@@ -103,6 +88,48 @@
                         if (responce == '1') {
                             location.reload();
                             input.val('');
+                        } else {
+                            alert(responce);
+                        }
+                    }
+                });
+            });
+
+            // Add Task
+            $('#addTaskInput').keypress(function(e) {
+                if (e.which == 13) {
+                    $.ajax({
+                        url: 'process/ajaxHandler.php',
+                        method: 'post',
+                        data: {
+                            action: 'addTask',
+                            taskTitle: $('#addTaskInput').val(),
+                            folder_id: <?= $_GET['folder_id'] ?? 0 ?>
+                        },
+                        success: function(responce) {
+                            if (responce == '1') {
+                                location.reload();
+                                $('#addTaskInput').val('');
+                            } else {
+                                alert(responce);
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('.is_done').click(function(e) {
+                let taskId = $(this).attr('data-taskId');
+                $.ajax({
+                    url: 'process/ajaxHandler.php',
+                    method: 'post',
+                    data: {
+                        action: 'taskStatus',
+                        taskId: taskId
+                    },
+                    success: function(responce) {
+                        if (responce == '1') {
+                            location.reload();
                         } else {
                             alert(responce);
                         }

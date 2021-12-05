@@ -132,17 +132,18 @@ li .active {
   font-weight: 600;
 }
 
-.is-done {
+.is_done {
   margin-top: -3px;
   float: left;
+  cursor: pointer;
 }
 
 .task {
   border-radius: 10px;
-  background-color: rgb(224, 224, 224);
+  background-color: rgb(238, 238, 238);
   padding: 10px 10px 10px 10px;
 }
 
 ul .checked{
-  background-color: rgb(187, 187, 187);
+  background-color: rgb(150, 150, 150);
 }
