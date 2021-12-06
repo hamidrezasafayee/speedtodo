@@ -24,3 +24,15 @@ function siteUrl($uri = null)
 {
     return BASE_URL . $uri;
 }
+
+function message(string $msg)
+{
+    echo "<div style='padding: 30px;width: 80%;margin: 50px auto;background: cyan;color: #521717;border-radius: 10px;font-family: sans-serif;'>$msg</div>";
+    die();
+}
+
+function messageError(string $msg)
+{
+    echo "<div style='padding: 30px;width: 80%;margin: 50px auto;background: #f9dede;color: #521717;border-radius: 10px;font-family: sans-serif;'>$msg</div>";
+    die();
+}

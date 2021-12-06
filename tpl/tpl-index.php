@@ -19,8 +19,8 @@
                 <div class="custom-nav">
                     <div class="title text-white">SpeedTodo</div>
                     <div class="user">
-                        <a href="http://learn.php/8-todo/?logout=1" class="float-end text-white mt-2"><i class="bi bi-box-arrow-right"></i></a>
-                        <span class="username float-end">hamidreza safayee</span>
+                        <a href="<?= siteUrl('?logout=1') ?>" class="float-end text-white mt-2"><i class="bi bi-box-arrow-right"></i></a>
+                        <span class="username float-end"><?= getLoggedInUser()->name ?></span>
                         <img src="assets/img/profile.png" class="rounded float-end" width="40" height="40">
                     </div>
                 </div>
